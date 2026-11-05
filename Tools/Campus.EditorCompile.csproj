@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DefineConstants>$(DefineConstants);UNITY_EDITOR;UNITY_2019_4</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Assets/Scripts/*.cs" />
+    <Compile Include="../Assets/Editor/*.cs" />
+    <Reference Include="$(UnityReferenceDir)/*.dll" />
+  </ItemGroup>
+  <Target Name="RequireUnityEditorReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(UnityReferenceDir)/UnityEditor.dll')"
+           Text="Use the verified Unity 2019 references from Tools/setup-cloud.sh." />
+  </Target>
+</Project>

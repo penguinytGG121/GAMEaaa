@@ -26,20 +26,20 @@ if [[ ! -x "$tools_dir/dotnet/dotnet" ]] || [[ "$("$tools_dir/dotnet/dotnet" --v
     tar -xzf "$tools_dir/sdk.tar.gz" -C "$tools_dir/dotnet"
 fi
 
-package="$tools_dir/unityengine.modules.nupkg"
-reference_hash=69dede070906eba450d13a00303fda93c319ea97e0ad85f170f19fb4df07ef27649f94ddaf0954e6a8194e41e98ce198a0826f224dfeefb556ab9dff514d9da8
+package="$tools_dir/unity3d.sdk.2019.4.15.1.nupkg"
+reference_hash=8a4aefd9764d4ddd0489e82a3cd89a62bb8505d1ceff19b00b9a97f94385284a819b06b182296490662b76807c74a35987980873053abc8fe23fe08ea5602ff2
 if [[ ! -f "$package" ]]; then
     curl -fsSL --retry 2 --max-time 90 \
-        https://api.nuget.org/v3-flatcontainer/unityengine.modules/2021.3.33/unityengine.modules.2021.3.33.nupkg \
+        https://api.nuget.org/v3-flatcontainer/unity3d.sdk/2019.4.15.1/unity3d.sdk.2019.4.15.1.nupkg \
         -o "$package"
 fi
 printf '%s  %s\n' "$reference_hash" "$package" | sha512sum -c -
 "$tools_dir/dotnet/dotnet" nuget verify "$package" --all --verbosity normal \
-    > "$tools_dir/unity-reference-verification.log" 2>&1 || {
-        cat "$tools_dir/unity-reference-verification.log" >&2
+    > "$tools_dir/unity2019-reference-verification.log" 2>&1 || {
+        cat "$tools_dir/unity2019-reference-verification.log" >&2
         exit 1
     }
-python3 - "$package" "$tools_dir/unity-reference" <<'PY'
+python3 - "$package" "$tools_dir/unity2019-reference" <<'PY'
 import pathlib
 import sys
 import zipfile
@@ -52,9 +52,9 @@ with zipfile.ZipFile(sys.argv[1]) as package:
     package.extractall(destination)
 PY
 
-echo 'C# tooling installed. Unity reference package is compile-only, distributed by a community NuGet owner.'
-if rg -q 'warn :' "$tools_dir/unity-reference-verification.log"; then
-    echo "NuGet verification warnings (see $tools_dir/unity-reference-verification.log):"
-    rg 'warn :' "$tools_dir/unity-reference-verification.log"
+echo 'C# tooling installed. Unity 2019.4 reference package is compile-only, distributed by a community NuGet owner.'
+if rg -q 'warn :' "$tools_dir/unity2019-reference-verification.log"; then
+    echo "NuGet verification warnings (see $tools_dir/unity2019-reference-verification.log):"
+    rg 'warn :' "$tools_dir/unity2019-reference-verification.log"
 fi
 echo 'No Unity Editor, license, native engine, or player build was installed by this script.'

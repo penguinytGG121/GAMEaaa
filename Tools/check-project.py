@@ -46,6 +46,15 @@ inputs = (root / 'ProjectSettings/InputManager.asset').read_text()
 check('m_Name: Mouse X' in inputs and 'm_Name: Mouse Y' in inputs, 'mouse input axes are missing')
 settings = (root / 'ProjectSettings/ProjectSettings.asset').read_text()
 check('activeInputHandler: 0' in settings, 'legacy input backend is not selected')
+version = (root / 'ProjectSettings/ProjectVersion.txt').read_text()
+check(version.strip() == 'm_EditorVersion: 2019.4.41f2', 'project must target Unity 2019.4.41f2')
+check('serializedVersion: 20' in settings, 'player settings must use the Unity 2019 serialization version')
+world = (root / 'Assets/Scripts/CampusWorld.cs').read_text()
+check('GetBuiltinResource<Font>("Arial.ttf")' in world and 'LegacyRuntime.ttf' not in world,
+      'Unity 2019 needs its built-in Arial font')
+for project in ('Campus.Compile.csproj', 'Campus.EditorCompile.csproj', 'Campus.RulesTests.csproj'):
+    check('<LangVersion>7.3</LangVersion>' in (root / 'Tools' / project).read_text(),
+          'C# checks must use Unity 2019-compatible syntax: ' + project)
 
 if errors:
     print('\n'.join('FAIL: ' + e for e in errors), file=sys.stderr)

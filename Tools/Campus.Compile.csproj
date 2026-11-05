@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DefineConstants>$(DefineConstants);UNITY_2019_4</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../Assets/Scripts/*.cs" />
     <Reference Include="$(UnityReferenceDir)/*.dll" />
   </ItemGroup>
   <Target Name="RequireUnityReferences" BeforeTargets="ResolveReferences">
-    <Error Condition="!Exists('$(UnityReferenceDir)/UnityEngine.CoreModule.dll')"
-           Text="Pass -p:UnityReferenceDir=/path/to/Unity/managed/modules, or use Tools/verify.sh." />
+    <Error Condition="!Exists('$(UnityReferenceDir)/UnityEngine.dll')"
+           Text="Pass -p:UnityReferenceDir=/path/to/Unity2019/managed/assemblies, or use Tools/verify.sh." />
   </Target>
 </Project>

@@ -2,13 +2,26 @@
 
 A Unity third-person campus sandbox inspired by the supplied Cadet College map. Walk the campus, borrow a car, deliver a parcel, and beat a timed driving circuit. The campus, characters, cars, UI, and engine sound are created procedurally; no paid assets or GTA assets are needed.
 
+This branch targets **Unity 2019.4.41f2 LTS**. [Download the Unity 2019 project ZIP](https://github.com/penguinytGG121/GAMEaaa/archive/refs/heads/unity-2019-lts.zip). The `main` branch retains the original Unity 2022 project.
+
 ## Open and play
 
-1. Install **Unity 2022.3.62f1 LTS** through Unity Hub and activate your Unity license. This project uses the **Built-in Render Pipeline** and legacy Input Manager.
+1. Use **Unity 2019.4.41f2 LTS** in Unity Hub with an activated Unity license. This project uses the **Built-in Render Pipeline** and legacy Input Manager.
 2. In Unity Hub, choose **Add project from disk** and select the folder containing `Assets`, `Packages`, and `ProjectSettings` (this repository's root).
 3. Open `Assets/Scenes/Campus.unity`. Press **Play**, then click **Enter Campus** in the Game view.
 
 The scene contains a bootstrap object. The world is generated when Play starts, so an empty-looking Edit Mode scene is expected. Import may create normal Unity settings and cache files. Use a landscape Game view of at least 1280 × 800 for the intended HUD layout.
+
+Fully extract the new ZIP before adding it. Select the actual `GAMEaaa-unity-2019-lts` folder containing `Assets`, `Packages`, and `ProjectSettings`. Some extraction tools create an extra outer folder; open that folder to find the project root. Unity Hub 2019 may label the action **Add** instead of **Add project from disk**. If your installed 2019.4.41f2 Editor is missing from Hub, use **Installs → Locate** to register it first. Use a fresh extraction of this branch for the port.
+
+For an installed Editor, opening the project directly is another option:
+
+```powershell
+# Windows PowerShell: replace the project path with your extracted folder.
+& 'C:\Program Files\Unity\Hub\Editor\2019.4.41f2\Editor\Unity.exe' -projectPath 'C:\Games\GAMEaaa-unity-2019-lts'
+```
+
+The compatibility port keeps the same campus and gameplay. It uses Unity 2019's built-in `Arial.ttf`, the 2019 player-settings and Transform serialization layouts, and C# 7.3 syntax checks. No URP, HDRP, TextMesh Pro, or Input System package is required.
 
 | Control | Action |
 | --- | --- |
@@ -57,12 +70,14 @@ bash Tools/setup-cloud.sh
 bash Tools/verify.sh
 ```
 
-Setup installs the official .NET 8.0.427 SDK under `/workspace/.campus-tools`, checking its published SHA-512. It downloads a checksum-pinned, NuGet-signed `UnityEngine.Modules` 2021.3.33 reference package distributed by a community owner, solely to compile-check the runtime scripts. Those reference DLLs are not Unity Editor, are not bundled with the game, and cannot run it. NuGet certificate-revocation warnings may appear where CRL destinations cannot be reached; verification is not disabled. The logs remain in the tools directory. Set `CAMPUS_TOOLS_DIR` to use a different location.
+Setup installs the official .NET 8.0.427 SDK under `/workspace/.campus-tools`, checking its published SHA-512. It downloads a checksum-pinned, NuGet-signed `Unity3D.SDK` 2019.4.15.1 reference package distributed by a community owner. This package contains Unity 2019.4 runtime and editor reference assemblies used to compile-check both game scripts and editor helpers with C# 7.3. The SDK version identifies its 2019.4 API reference baseline; the project targets 2019.4.41f2. Those reference DLLs are not an installed Unity Editor, are not bundled with the game, and cannot run it. NuGet certificate-revocation warnings may appear where CRL destinations cannot be reached; verification is not disabled. Logs remain in `/workspace/.campus-tools/unity2019-reference-verification.log`. Set `CAMPUS_TOOLS_DIR` to use a different location. The .NET SDK is only for cloud checks; you do not need it to play in Unity.
 
-The checks validate Unity asset GUIDs, scene and build wiring, required engine modules, mouse axes, C# syntax and referenced APIs, and mission rules including timeout and replay. Tool outputs stay outside the checkout. No credentials or external game services are required. Downloads use `builds.dotnet.microsoft.com` and `api.nuget.org` through the managed network configuration.
+The checks validate Unity asset GUIDs, scene and build wiring, required engine modules, mouse axes, the 2019.4.41f2 version pin, legacy font and settings compatibility, C# syntax and referenced runtime/editor APIs, and mission rules including timeout and replay. Tool outputs stay outside the checkout. No credentials or external game services are required. Downloads use `builds.dotnet.microsoft.com` and `api.nuget.org` through the managed network configuration.
 
 Each cloud task is already isolated. Use the existing checkout; do not create a Git worktree unless requested.
 
 ## Validation status
 
-In this cloud instance, runtime C# compilation against the references passed with zero warnings/errors, all 21 mission-rule checks passed, and Unity project structure checks passed. Unity Editor is not installed and a Unity license is not supplied, so **Play Mode, visuals, native vehicle physics, editor helper compilation, and standalone builds remain unverified**. The downloadable archive is source, not a tested executable. See [Docs/PLAYTEST.md](Docs/PLAYTEST.md) for the remaining Unity checks.
+Both runtime and editor C# compilation passed against the 2019.4 reference assemblies with zero warnings/errors and C# 7.3. All 21 mission-rule checks and 66 project structure/compatibility checks passed in this cloud instance.
+
+Unity Editor is not installed in this cloud instance and a Unity license is not supplied. Source validation uses Unity 2019.4 reference assemblies; it does not run the 2019.4.41f2 Editor. **Play Mode, visuals, native vehicle physics, editor execution, Hub import and standalone builds remain unverified here.** The downloadable archive is source, not a tested executable. See [Docs/PLAYTEST.md](Docs/PLAYTEST.md) for the remaining Unity checks.

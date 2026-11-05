@@ -235,7 +235,7 @@ namespace CadetCampus
             sign.anchor = TextAnchor.MiddleCenter;
             sign.alignment = TextAlignment.Center;
             sign.fontSize = 48;
-            if (!signFont) signFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (!signFont) signFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
             sign.font = signFont;
             sign.GetComponent<MeshRenderer>().sharedMaterial = signFont.material;
             sign.characterSize = size;

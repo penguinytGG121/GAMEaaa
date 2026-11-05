@@ -1,6 +1,6 @@
 # Unity acceptance checks
 
-These checks require Unity 2022.3.62f1 and an activated license. They have **not** been executed in the cloud instance.
+These checks require Unity 2019.4.41f2 LTS and an activated license. They have **not** been executed in the cloud instance.
 
 1. Import the project using the Built-in Render Pipeline. Confirm the Console has no compilation errors. Run Tools → Cadet Campus → Validate project.
 2. Open the Campus scene and enter Play Mode. Confirm the campus appears, the menu responds, and Enter Campus captures the mouse and shows a cadet at the gate.
